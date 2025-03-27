@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block content %}
+<br>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <form method="post" class="form">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <br>
+                    <span>Login qilish uchun <a href="/auth/login">link</a></span>
+                    <br><br>
+                    <button class="btn btn-primary" type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+<br>
+
+{% endblock content %}

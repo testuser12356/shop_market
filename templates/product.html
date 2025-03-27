@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- CC pc sidebar accordion Start -->
+
+<div class="cc_pc_accordion_main_wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12  col-md-12 col-sm-12 col-xs-12 sidebar2_main_wrapper">
+                <div class="sidebar_widget">
+                    <div class="ss_proadd_wrapper ss_proadd_wrapper_inner">
+                        <div class="ss_proadd_box">
+                            <h2>New Mackbook pro 8GB, {{ text }} 1TB</h2>
+                            <p>Starting @ $550 only/-</p>
+                            <img src="images/content/Mockup1.png" alt="camera" title="Camera" class="img-responsive"> <a
+                                href="#" class="ss_btn">Shop Now!</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="tab-content">
+                            <div id="grid" class="tab-pane fade in active">
+                                <div class="row">
+                                    {% for i in object_list %}
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 prs_upcom_slide_first">
+                                        <div class="ss_featured_products_box">
+                                            <div class="ss_featured_products_box_img"><span class="ss_tag">new</span>
+                                                <span class="ss_offer">20% off</span>
+                                                <img src="{{ i.main_image.url }}" alt="Product" class="img-responsive">
+                                                <ul>
+                                                    <li>
+                                                        <ul>
+                                                            <li><i class="fa fa-circle corol_1" aria-hidden="true"></i>
+                                                            </li>
+                                                            <li><i class="fa fa-circle corol_2" aria-hidden="true"></i>
+                                                            </li>
+                                                            <li><i class="fa fa-circle corol_3" aria-hidden="true"></i>
+                                                            </li>
+                                                            <li><i class="fa fa-circle corol_4" aria-hidden="true"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i>
+                                                        Quick View</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="ss_feat_prod_cont_heading_wrapper">
+                                                <h4><a href="#">{{ i.title }}</a></h4>
+
+                                                <p>{{ i.category.name }}</p>
+                                                {% if i.discount_price == 0 %}
+                                                <ins>{{ i.price }}</ins>
+                                                {% else %}
+                                                <del>{{ i.price }}</del>
+                                                <ins>{{ i.discount_price }}</ins>
+                                                {% endif %}
+                                            </div>
+                                            <div class="ss_featured_products_box_footer">
+                                                <fieldset class="rating">
+                                                    <input type="radio" name="rating" value="5"/>
+                                                    <label class="full" title="5 stars"></label>
+                                                    <input type="radio" name="rating" value="4 and a half"/>
+                                                    <label class="half" title="4.5 stars"></label>
+                                                    <input type="radio" name="rating" value="4"/>
+                                                    <label class="full" title="4 stars"></label>
+                                                    <input type="radio" name="rating" value="3 and a half"/>
+                                                    <label class="half" title="3.5 stars"></label>
+                                                    <input type="radio" name="rating" value="3"/>
+                                                    <label class="full" title="3 stars"></label>
+                                                    <input type="radio" name="rating" value="2 and a half"/>
+                                                    <label class="half" title="2.5 stars"></label>
+                                                    <input type="radio" name="rating" value="2"/>
+                                                    <label class="full" title="2 stars"></label>
+                                                    <input type="radio" name="rating" value="1 and a half"/>
+                                                    <label class="half" title="1.5 stars"></label>
+                                                    <input type="radio" name="rating" value="1"/>
+                                                    <label class="full" title="1 star"></label>
+                                                    <input type="radio" name="rating" value="half"/>
+                                                    <label class="half" title="0.5 stars"></label>
+                                                </fieldset>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-random" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <button class="ss_btn">Add To Bag</button>
+                                                    </li>
+                                                    <li>
+                                                        <form action="{% url 'add_to_favorite' %}" method="post">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="product" value="{{ i.id }}">
+                                                            <button type="submit" class="btn">
+                                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CC pc sidebar accordion End -->
+
+{% endblock content %}
+
+
+	
