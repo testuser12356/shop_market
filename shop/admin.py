@@ -38,3 +38,15 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(models.Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     ...
+
+
+@admin.register(models.Brand)
+class BrandAdmin(admin.ModelAdmin):
+    actions = [duplicate]
+    list_editable = ("image",)
+    list_display = ("id", "name", "image")
+
+
+@admin.register(models.News)
+class NewsAdmin(admin.ModelAdmin):
+    actions = [duplicate]

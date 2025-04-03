@@ -8,7 +8,16 @@ import shop.models as models
 
 def home(request):
     categories = models.ProductCategory.objects.filter(parent=None)
-    return render(request, "index.html", context={"categories": categories})
+    last_news = models.News.objects.all()[:6]
+    brands = models.Brand.objects.all()
+    return render(
+        request, "index.html",
+        context={
+            "categories": categories,
+            "last_news": last_news,
+            "brands": brands
+        }
+    )
 
 
 def product_list(request, category_id):
