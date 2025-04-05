@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 
 import shop.models as models
@@ -51,3 +52,35 @@ def add_to_favorite(request):
                 product_id=product_id
             )
             return redirect("/")
+
+
+def create_cart(request, product_id, quantity):
+    if request.user.is_authenticated:
+        carts = models.Cart.objects.filter(user=request.user, is_active=True)
+        if carts.exist():
+            cart = carts.last()
+            models.CartItem.objects.create(
+                cart=cart,
+                product_id=product_id,
+                quantity=quantity
+            )
+        else:
+            cart = models.Cart.objects.create(user=request.user)
+            models.CartItem.objects.create(
+                cart=cart,
+                product_id=product_id,
+                quantity=quantity
+            )
+        messages.success(request, "Cart Item qo'shildi")
+        return redirect("/")
+    else:
+        messages.warning(request, "Siz login bolmagansiz")
+        return redirect("/")
+
+
+def product_detail(request, pk):
+    obj = models.Product.objects.get(pk=pk)
+    related_products = models.Product.objects.filter(category=obj.category)
+    return render(request,
+                  "product_single.html",
+                  {"object": obj, "related_products": related_products})

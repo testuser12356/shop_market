@@ -50,3 +50,13 @@ class BrandAdmin(admin.ModelAdmin):
 @admin.register(models.News)
 class NewsAdmin(admin.ModelAdmin):
     actions = [duplicate]
+
+
+@admin.register(models.Cart)
+class CartAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(models.CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    ...
