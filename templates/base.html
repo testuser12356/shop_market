@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load bootstrap5 %}
 <html lang="en">
 
 <head>
@@ -41,25 +42,8 @@
 <div class="ss_top_header_wrapper">
     <div class="ss_top_left_header_wrapper">
         <ul>
-            <li>
-                <p>Language :<span><img src="images/header/flag.png" alt="Flag" title="Flag"> English <i
-                        class="fa fa-angle-down" aria-hidden="true"></i></span>
-                </p>
-                <div class="ss_opener"><span><img src="images/header/flag.png" alt="Flag" title="Flag"> English</span>
-                    <span><img src="images/header/flag.png" alt="Flag" title="Flag"> Hebrew</span>
-                    <span><img src="images/header/flag.png" alt="Flag" title="Flag"> Russian</span>
-                    <span><img src="images/header/flag.png" alt="Flag" title="Flag"> Spanish</span>
-                </div>
-            </li>
-            <li>
-                <p>Currency :<span> $ USD <i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                </p>
-                <div class="ss_opener"><span>$ USD</span>
-                    <span>$ EUR</span>
-                    <span>$ BHD</span>
-                    <span>$ CNY</span>
-                </div>
-            </li>
+
+
             <li class="ss_header_store_title"><i>Welcome to our big basket!</i>
             </li>
         </ul>
@@ -104,21 +88,21 @@
             <li>
                 <form action="{% url 'product_filter' %}">
                     <div class="ss_search_box">
-                    <select name="category">
-                        <option value="">All Categories</option>
-                        {% for i in category_list %}
-                        <option disabled style="font-weight: bolder;"><b>{{ i.name }}</b></option>
+                        <select name="category">
+                            <option value="">All Categories</option>
+                            {% for i in category_list %}
+                            <option disabled style="font-weight: bolder;"><b>{{ i.name }}</b></option>
                             {% for item in i.children.all %}
-                                <option value="{{ item.id }}">{{ item.name }}</option>
+                            <option value="{{ item.id }}">{{ item.name }}</option>
 
                             {% endfor %}
-                        {% endfor %}
-                    </select>
-                    <span>
+                            {% endfor %}
+                        </select>
+                        <span>
 							<input type="text" name="search" placeholder="Search for products">
 							<button><i class="fa fa-search" aria-hidden="true"></i></button>
 						</span>
-                </div>
+                    </div>
                 </form>
 
             </li>
@@ -127,7 +111,8 @@
                     <ul>
                         <li><a href="#"><i class="fa fa-random" aria-hidden="true"></i><span>3</span></a>
                         </li>
-                        <li><a href="#"><i class="fa fa-heart" aria-hidden="true"></i><span>{{ user.favorites.count }}</span></a>
+                        <li><a href="#"><i class="fa fa-heart"
+                                           aria-hidden="true"></i><span>{{ user.favorites.count }}</span></a>
                         </li>
                         <li><a href="#"><i class="fa fa-bell" aria-hidden="true"></i><span>2</span></a>
                         </li>
@@ -151,55 +136,36 @@
                     {% endif %}
                 </div>
             </li>
+            {% if has_cart %}
             <li>
                 <div class="ss_cart_value dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <p>3</p>
-                        <img src="images/header/cart_icon.png" alt="Cart" title="Cart"> <span>cart: <ins>$ 25.00</ins></span>
+                        <p>{{ total_cart_item }}</p>
+                        <img src="{% static 'images/header/cart_icon.png' %}" alt="Cart" title="Cart">
+                        <span>cart: <ins>$ {{ total_cart_sum }}</ins></span>
                         <ul class="dropdown-menu">
+                            {% for i in user.carts.all %}
+                            {% for item in i.items.all %}
                             <li>
                                 <div class="ss_cart_inner_main_section">
                                     <div class="ss_cart_img_wrapper">
-                                        <img src="images/header/cart_img.jpg" alt="cart_img">
+                                        <img width="50" src="{{ item.product.main_image.url }}" alt="cart_img">
                                     </div>
                                     <div class="ss_cart_img_cont_wrapper">
-                                        <h3>Product item</h3>
-                                        <h4>Product category</h4>
+                                        <h3>{{ item.product.title }}</h3>
+                                        <h4>{{ item.product.category.name }}</h4>
                                         <span>x</span>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div class="ss_cart_inner_main_section ss_cart_inner_main_section2">
-                                    <div class="ss_cart_img_wrapper">
-                                        <img src="images/header/cart_img.jpg" alt="cart_img">
-                                    </div>
-                                    <div class="ss_cart_img_cont_wrapper">
-                                        <h3>Product item</h3>
-                                        <h4>Product category</h4>
-                                        <span>x</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="ss_cart_inner_main_section ss_cart_inner_main_section2">
-                                    <div class="ss_cart_img_wrapper">
-                                        <img src="images/header/cart_img.jpg" alt="cart_img">
-                                    </div>
-                                    <div class="ss_cart_img_cont_wrapper">
-                                        <h3>Product item</h3>
-                                        <h4>Product category</h4>
-                                        <span>x</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="checkout.html" class="ss_check_btn">Checkout</a>
-                            </li>
+                            {% endfor %}
+                            {% endfor %}
+                            <a href="/order/create/" class="btn btn-primary">Checkout</a>
                         </ul>
                     </a>
                 </div>
             </li>
+            {% endif %}
         </ul>
     </div>
 </div>

@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 
 import shop.models as models
 
@@ -57,25 +57,62 @@ def add_to_favorite(request):
 def create_cart(request, product_id, quantity):
     if request.user.is_authenticated:
         carts = models.Cart.objects.filter(user=request.user, is_active=True)
-        if carts.exist():
+        price = models.Product.objects.get(id=product_id).price
+        t_sum = quantity * price
+        if carts.exists():
             cart = carts.last()
             models.CartItem.objects.create(
                 cart=cart,
                 product_id=product_id,
-                quantity=quantity
+                quantity=quantity,
+                sum=t_sum
             )
+            cart.save()
         else:
             cart = models.Cart.objects.create(user=request.user)
             models.CartItem.objects.create(
                 cart=cart,
                 product_id=product_id,
-                quantity=quantity
+                quantity=quantity,
+                sum=t_sum
             )
+            cart.save()
         messages.success(request, "Cart Item qo'shildi")
         return redirect("/")
     else:
-        messages.warning(request, "Siz login bolmagansiz")
+        messages.error(request, "Siz login bolmagansiz")
         return redirect("/")
+
+
+def create_order(request):
+    if request.user.is_authenticated:
+        cart = models.Cart.objects.filter(user=request.user, is_active=True).first()
+
+        if not cart:
+            return HttpResponse("No active cart")
+
+        order = models.Order.objects.create(
+            client=request.user,
+            cart=cart,
+            total_sum=cart.total_sum
+        )
+
+        for item in cart.items.all():
+            models.OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price,
+                sum=item.sum
+            )
+        cart.is_active = False
+        cart.save()
+        return redirect(f"/order/detail/{order.id}")
+
+
+def order_detail(request, pk):
+    order = get_object_or_404(models.Order, pk=pk)
+    return render(request, "checkout.html", {"order": order})
 
 
 def product_detail(request, pk):
@@ -84,3 +121,7 @@ def product_detail(request, pk):
     return render(request,
                   "product_single.html",
                   {"object": obj, "related_products": related_products})
+
+
+def create_billing_info(request):
+    ...

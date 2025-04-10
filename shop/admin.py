@@ -60,3 +60,11 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(models.CartItem)
 class CartItemAdmin(admin.ModelAdmin):
     ...
+
+@admin.register(models.BillingInfo)
+class CartItemAdmin(admin.ModelAdmin):
+    ...
+
+@admin.register(models.ShippingAddress)
+class CartItemAdmin(admin.ModelAdmin):
+    ...
